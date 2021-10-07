@@ -2,15 +2,15 @@
 GET http://localhost:4000/
 
 ###
-GET http://localhost:4000/listadoOpinion
+GET http://localhost:4040/listadoOpinion
 
 ###
-POST http://localhost:4000/registrar 
+POST http://localhost:4040/registrar 
 Content-Type: application/json
 
 {
-"comentario":"mal", "nc":2
+"comentario":"mal"
 }
 
 ###
-GET http://localhost:4000/uno/615e00c4d992625ca2322507
+GET http://localhost:4040/uno/615f61615372c362ffbd5f9f

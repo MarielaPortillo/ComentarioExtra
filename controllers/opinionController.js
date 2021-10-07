@@ -1,4 +1,5 @@
 import opinion from "../models/opinion.js";
+import valo from '../models/valoracion.js';
 import 'swagger-ui-express';
 import 'swagger-jsdoc';
 
@@ -6,7 +7,7 @@ const controlador={}
 
 controlador.listado= async (req,res)=>{
     console.log("Ejecutando el FIND")
-    const opiniones= await opinion.find()
+    const opiniones= await opinion.find().populate({path:'valoracion', Model:'Valoracion'})
     res.json(opiniones)
     console.log(opiniones)
 }
@@ -27,11 +28,25 @@ controlador.uno= async (req,res)=>{
 
 controlador.registrar= async (req,res)=>{
 
-    const {comentario, nc}=req.body;
-    const nuevaOpinion = new opinion({comentario,nc});
+    const {comentario, valoracion}=req.body;
+    const nuevaOpinion = new opinion({comentario});
 
-    console.log(nuevaOpinion)
-    await nuevaOpinion.save();
+    if (valoracion) {
+        const r1 = await valo.find({valoracion: {$in: valoracion}})
+        nuevaOpinion.valoracion = r1.map(valoracion=>valoracion._id);
+    }
+    else{
+
+        const val = await valo.findOne({valoracion: "1E"});
+        console.log(val)
+        nuevaOpinion.valoracion = [val._id];
+
+    }
+
+    
+
+    const nuevaOpinion1 = await nuevaOpinion.save();
+   // await nuevaOpinion.save();
     res.send("Se creo nueva opinion")
 }
 

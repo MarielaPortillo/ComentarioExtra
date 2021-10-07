@@ -4,7 +4,11 @@ import  Mongoose  from "mongoose";
 const opinionSchema=Mongoose.Schema({
 
     comentario: {type:String, require:true},
-    nc: {type:Number, require:true},
+    valoracion: [{
+        ref: "Valoracion",
+        type: Mongoose.Schema.Types.ObjectId
+      }]
+  
 
 
 })

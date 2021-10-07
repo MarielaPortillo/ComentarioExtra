@@ -71,7 +71,7 @@ ruta.get("/uno/:id",opinionController.uno)
  *      tags: [Opiniones]
  *      description: Creando nueva opinion
  *      requestBody:
- *          
+ * 
  *          content:
  *              application/json:
  *                  
