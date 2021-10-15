@@ -1,70 +1,80 @@
-import opinion from "../models/opinion.js";
+import Opinion from "../models/opinion.js";
 import valo from '../models/valoracion.js';
 import 'swagger-ui-express';
 import 'swagger-jsdoc';
+import fetch from 'node-fetch';
 
-const controlador={}
+const controlador = {}
 
-controlador.listado= async (req,res)=>{
+controlador.listado = async (req, res) => {
     console.log("Ejecutando el FIND")
-    const opiniones= await opinion.find().populate({path:'valoracion', Model:'Valoracion'})
+    const opiniones = await opinion.find().populate({ path: 'valoracion', Model: 'Valoracion' })
     res.json(opiniones)
     console.log(opiniones)
 }
+controlador.valoracion = async (req, res) => {
+    await fetch("https://api-comercios.herokuapp.com/puntuacion")
+        .then((resp) => {
+            return resp.json()
+        }).then((res) => {
+            console.log(res)
+        }).then((entidad) => res.status(200).send(entidad))
+        .catch((err) => res.status(400).send(
+            {
+                "error": "No hay datos de valoraciones",
+            }
 
-
-
-controlador.uno= async (req,res)=>{
-    console.log("Consulta individual comentarios")
-    const Uopinion= await opinion.findById(req.params.id)
-    res.json(Uopinion)
-    
-        
+        ));
 }
 
+controlador.comentario = async (req, response) => {
+
+    await fetch("https://api-comercios.herokuapp.com/puntuacion")
+        .then((resp) => {
+            return resp.json()
+        }).then((res) => {
+            console.log(JSON.stringify(res))
+            let menor = res.menor;
+            let mayor = res.mayor;
+            let promedio = res.promedio;
+            console.log(menor)
+            console.log(mayor)
+            console.log(promedio)
+            if ((menor < mayor) && (promedio <= mayor) && (promedio >= menor)) {
+                new Opinion({
+                    comentario: "Los productos son buenos, recomiendo el comercio",
+                    valoracion: mayor
+                }).save()
+                
+
+            } else {
+                if ((menor < mayor) && (promedio >= mayor)) {
+                    new Opinion({
+                        comentario: "Los productos del comercio son buenos",
+                        valoracion: promedio
+                    }).save()
+                    
+                }
+                else {
+                    if ((menor < mayor) && (promedio === menor)) {
+                        new Opinion({
+                            comentario: "Malisimo, mal servicio no lo recomiendo para nada",
+                            valoracion: menor
+                        }).save()
+                        
 
 
+                    }
+                }
+            }
+        })
+
+        const opinion = await Opinion.find().sort({ $natural:-1 }).limit(1)
+        response.send(opinion)
 
 
-controlador.registrar= async (req,res)=>{
-
-    const {comentario, valoracion}=req.body;
-    const nuevaOpinion = new opinion({comentario});
-
-    if (valoracion) {
-        const r1 = await valo.find({valoracion: {$in: valoracion}})
-        nuevaOpinion.valoracion = r1.map(valoracion=>valoracion._id);
-    }
-    else{
-
-        const val = await valo.findOne({valoracion: "1E"});
-        console.log(val)
-        nuevaOpinion.valoracion = [val._id];
-
-    }
-
-    
-
-    const nuevaOpinion1 = await nuevaOpinion.save();
-   // await nuevaOpinion.save();
-    res.send("Se creo nueva opinion")
 }
 
-
-//editar
-controlador.actualizar= async (req,res)=>{
-    
-    console.log("Actualizando Opinion")
-    await opinion.findByIdAndUpdate(req.params.id, req.body)
-    res.json({"status":"Opinion Actualizada"})
-}
-
-//eliminar
-controlador.eliminar= async (req,res)=>{
-    console.log("Eliminando Opinion")
-    await opinion.findByIdAndDelete(req.params.id)
-    res.json({"status":"Opinion Eliminada"})
-}
 
 
 export default controlador

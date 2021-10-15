@@ -5,7 +5,8 @@ import Rutasopinion from "./routes/opinion.routes.js";
 //mport RutasUsuario from   "./routes/usuario.routes.js";
 import swaggerUI from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import {createValoracion} from "./libs/configInit.js"
+import {createValoracion} from "./libs/configInit.js";
+
 
 createValoracion();
 
@@ -43,6 +44,8 @@ app.set('puerto',4040)
 app.get("/",(req,res)=>{
     res.send("hola mongo");
 })
+
+
 
 const specs = swaggerJSDoc(options);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));

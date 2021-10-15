@@ -58,31 +58,8 @@ ruta.get("/listadoOpinion",opinionController.listado)
    */
 
 //listaruno
-ruta.get("/uno/:id",opinionController.uno)
+ruta.get("/comentario",opinionController.comentario)
 
 
-
-
-/**
- * @swagger
- * /registrar:
- *  post:
- *      summary: Creando opinion
- *      tags: [Opiniones]
- *      description: Creando nueva opinion
- *      requestBody:
- * 
- *          content:
- *              application/json:
- *                  
-   * 
-   */
-
-ruta.post("/registrar",opinionController.registrar)
-
-//delete
-ruta.delete("/eliminarOpinion/:id",opinionController.eliminar)
-
-//editar
-ruta.put("/editarOpinion/:id",opinionController.actualizar)
+ruta.get("/valoracion",opinionController.valoracion)
 export default ruta 
