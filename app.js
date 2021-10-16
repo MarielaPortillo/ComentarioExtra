@@ -38,7 +38,7 @@ app.use(Express.urlencoded({extended:true}));
 app.use(Morgan('dev'))
 app.use(Rutasopinion)
 //app.use(RutasUsuario)
-app.set(process.env.PORT || 4040)
+app.set('puerto',4000)
 
 //GET con  
 app.get("/",(req,res)=>{
