@@ -8,7 +8,7 @@ const controlador = {}
 
 controlador.listado = async (req, res) => {
     console.log("Ejecutando el FIND")
-    const opiniones = await opinion.find().populate({ path: 'valoracion', Model: 'Valoracion' })
+    const opiniones = await Opinion.find().populate({ path: 'valoracion', Model: 'Valoracion' })
     res.json(opiniones)
     console.log(opiniones)
 }
