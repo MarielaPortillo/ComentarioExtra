@@ -1,1 +1,1 @@
-web: nodemon run index.js
+web: node app.js
