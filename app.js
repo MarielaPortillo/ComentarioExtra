@@ -16,7 +16,7 @@ const options = {
       openapi: "3.0.0",
       info: {
         title: "API de comentarios",
-        version: "1.0.0",
+        version: "1.0.0",  
         description:
           "Esta es una API para poder encontrar informacion de los comentarios",
       },
